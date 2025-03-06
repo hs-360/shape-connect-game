@@ -1,11 +1,12 @@
 :root {
     --primary-color: #2c3e50;
     --secondary-color: #34495e;
-    --player-color: #e74c3c;
-    --ai-color: #3498db;
+    --player-color: #e39e83;
+    --ai-color: #77ad95;
     --background-color: #ecf0f1;
     --text-color: #2c3e50;
     --border-color: #bdc3c7;
+    --highlight-color: rgba(247, 226, 169, 0.5);
 }
 
 * {
@@ -15,7 +16,7 @@
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    font-family: sans-serif;
     background-color: var(--background-color);
     color: var(--text-color);
     line-height: 1.6;
@@ -40,6 +41,7 @@ h1 {
     font-weight: 700;
     margin-bottom: 1rem;
     color: var(--primary-color);
+    font-family: sans-serif;
 }
 
 .shape-selector {
@@ -55,6 +57,7 @@ select {
     color: var(--text-color);
     cursor: pointer;
     transition: border-color 0.3s ease;
+    font-family: sans-serif;
 }
 
 select:focus {
@@ -101,47 +104,54 @@ select:focus {
     background-color: var(--ai-color);
 }
 
-.cell.circle::after {
-    content: '';
-    position: absolute;
-    top: 10%;
-    left: 10%;
-    right: 10%;
-    bottom: 10%;
+.cell.circle {
     border-radius: 50%;
-    background-color: white;
 }
 
-.cell.square::after {
-    content: '';
-    position: absolute;
-    top: 10%;
-    left: 10%;
-    right: 10%;
-    bottom: 10%;
-    background-color: white;
+.cell.square {
+    border-radius: 0;
 }
 
-.cell.triangle::after {
-    content: '';
-    position: absolute;
-    top: 10%;
-    left: 10%;
-    right: 10%;
-    bottom: 10%;
-    background-color: white;
+.cell.triangle {
     clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
 }
 
-.cell.diamond::after {
+.cell.diamond {
+    border-radius: 0;
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+}
+
+.cell.highlight {
+    position: relative;
+}
+
+.cell.highlight::after {
     content: '';
     position: absolute;
-    top: 10%;
-    left: 10%;
-    right: 10%;
-    bottom: 10%;
-    background-color: white;
-    transform: rotate(45deg);
+    top: 50%;
+    left: 50%;
+    width: 120%;
+    height: 4px;
+    background-color: var(--highlight-color);
+    transform: translate(-50%, -50%);
+    z-index: 1;
+}
+
+.cell.highlight[data-direction="vertical"]::after {
+    width: 4px;
+    height: 120%;
+}
+
+.cell.highlight[data-direction="diagonal-down"]::after {
+    width: 160%;
+    height: 4px;
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.cell.highlight[data-direction="diagonal-up"]::after {
+    width: 160%;
+    height: 4px;
+    transform: translate(-50%, -50%) rotate(-45deg);
 }
 
 .game-over {
@@ -167,6 +177,8 @@ select:focus {
     font-size: 2rem;
     margin-bottom: 2rem;
     text-align: center;
+    font-family: sans-serif;
+    font-weight: 500;
 }
 
 #playAgain {
@@ -178,10 +190,12 @@ select:focus {
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    font-family: sans-serif;
+    font-weight: 500;
 }
 
 #playAgain:hover {
-    background-color: #c0392b;
+    background-color: #d18b6f;
 }
 
 .directions {
@@ -190,6 +204,7 @@ select:focus {
     color: var(--text-color);
     font-size: 1.1rem;
     font-weight: 500;
+    font-family: sans-serif;
 }
 
 .close-button {
