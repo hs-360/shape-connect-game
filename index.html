@@ -3,24 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Project</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <title>Shape Connect</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
+    <div class="game-container">
         <header>
-            <h1>Welcome to New Project</h1>
+            <h1>Shape Connect</h1>
+            <div class="shape-selector">
+                <select id="shapeSelect">
+                    <option value="circle">Circle</option>
+                    <option value="square">Square</option>
+                    <option value="triangle">Triangle</option>
+                    <option value="diamond">Diamond</option>
+                </select>
+            </div>
         </header>
         
-        <main>
-            <p>Start building your project here!</p>
-        </main>
-        
-        <footer>
-            <p>&copy; 2024 Your Name</p>
-        </footer>
+        <div class="game-board">
+            <div class="board-grid" id="boardGrid"></div>
+        </div>
+
+        <div class="game-over" id="gameOver">
+            <button class="close-button" id="closeGameOver">×</button>
+            <div class="message"></div>
+            <button id="playAgain">Play Again</button>
+        </div>
+
+        <div class="directions">
+            Directions: Connect 4 shapes or colors to win!
+        </div>
     </div>
-    
-    <script src="js/main.js"></script>
+    <script src="game.js"></script>
 </body>
 </html> 
