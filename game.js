@@ -116,6 +116,7 @@ class Game {
         // Check for color win
         for (const direction of directions) {
             let colorCount = 1;
+            let winningCells = [[row, col]];
             
             for (const [dr, dc] of direction) {
                 let r = row + dr;
@@ -128,6 +129,7 @@ class Game {
                     this.board[r][c].player === piece.player
                 ) {
                     colorCount++;
+                    winningCells.push([r, c]);
                     r += dr;
                     c += dc;
                 }
@@ -135,6 +137,7 @@ class Game {
 
             if (colorCount >= 4) {
                 this.winType = 'color';
+                this.winningCells = winningCells;
                 return true;
             }
         }
@@ -142,6 +145,7 @@ class Game {
         // Check for shape win
         for (const direction of directions) {
             let shapeCount = 1;
+            let winningCells = [[row, col]];
             
             for (const [dr, dc] of direction) {
                 let r = row + dr;
@@ -154,6 +158,7 @@ class Game {
                     this.board[r][c].shape === piece.shape
                 ) {
                     shapeCount++;
+                    winningCells.push([r, c]);
                     r += dr;
                     c += dc;
                 }
@@ -161,11 +166,37 @@ class Game {
 
             if (shapeCount >= 4) {
                 this.winType = 'shape';
+                this.winningCells = winningCells;
                 return true;
             }
         }
 
         return false;
+    }
+
+    highlightWinningCells() {
+        if (!this.winningCells) return;
+        
+        // Determine the direction of the winning sequence
+        const [firstRow, firstCol] = this.winningCells[0];
+        const [lastRow, lastCol] = this.winningCells[this.winningCells.length - 1];
+        
+        let direction = 'horizontal';
+        if (firstCol === lastCol) {
+            direction = 'vertical';
+        } else if (lastRow - firstRow === lastCol - firstCol) {
+            direction = 'diagonal-down';
+        } else if (lastRow - firstRow === firstCol - lastCol) {
+            direction = 'diagonal-up';
+        }
+        
+        this.winningCells.forEach(([row, col]) => {
+            const cell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+            if (cell) {
+                cell.classList.add('highlight');
+                cell.setAttribute('data-direction', direction);
+            }
+        });
     }
 
     aiMove() {
@@ -286,7 +317,8 @@ class Game {
         const gameOver = document.getElementById('gameOver');
         const message = gameOver.querySelector('.message');
         
-        message.textContent = `${this.winner === 'player' ? 'You' : 'AI'} wins by ${this.winType}!`;
+        message.textContent = this.winner === 'player' ? 'You are the winner!' : 'AI is the winner!';
+        this.highlightWinningCells();
         gameOver.classList.add('active');
     }
 
@@ -297,6 +329,12 @@ class Game {
         this.winner = null;
         this.winType = null;
         this.currentShape = 'circle';
+        this.winningCells = null;
+        
+        // Remove highlight class from all cells
+        document.querySelectorAll('.cell').forEach(cell => {
+            cell.classList.remove('highlight');
+        });
         
         document.getElementById('shapeSelect').value = this.currentShape;
         document.getElementById('gameOver').classList.remove('active');
